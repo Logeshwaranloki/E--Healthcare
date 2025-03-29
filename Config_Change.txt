@@ -1,0 +1,14 @@
+C:\xampp\php\php.ini
+From
+upload_max_filesize = 8M;
+post_max_size = 40M;
+
+to
+
+then set :
+upload_max_filesize = 1000M;
+post_max_size = 1000M;
+
+save
+
+then start apache nad mysql
