@@ -1,0 +1,136 @@
+
+<?php
+session_start();
+$Name=$_SESSION["uname"];
+$id=$_SESSION["uid"];	
+$sid=$_SESSION["id"];
+
+//echo $sid."hello";			
+//echo $id"";			
+//echo $Name;			
+?>
+
+<html>
+<style>
+h3{
+	text-align:justify;
+	font-size:15px;
+	line-height:20px;
+}.color {
+        color: #C22705;
+      }
+	
+	th {
+        font-size: 20px;
+      }
+	.mydiv{
+		margin-top:200px;
+		margin-bottom:100px;
+		margin-right:150px;
+		margin-left:80px;
+		}
+	input[type=text] {
+		 border-radius: 15px;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+input[type=email] {
+  width: 100%;
+  border-radius: 15px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+input[type=password] {
+  width: 100%;
+  border-radius: 15px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+
+
+textarea {
+  width: 100%;
+  border-radius: 15px;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+		 
+input[type=submit] {
+  width: 100%;
+  border-radius: 15px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+</style>
+<head>
+</head>
+<body>
+<center>
+		<table>
+<div class="mydiv">
+<?php
+include "dboyheader.php";
+$con=mysqli_connect("localhost:3306","root","","store_at_door_step");
+if(!$con)
+{
+die("ERROR".mysqli_error());
+}
+$t="SELECT cart.did as Cid,cart.pid as Pid,cart.price as Price,cart.quantity as Quantity,cart.amount as Amt,data.image as img,data.did as Did FROM `cart` join `data` on cart.pid=data.id where cart.status='ORDERED' and cart.db='$sid'";
+//$t="select * from cart where status='ORDERED' and db='$sid'";
+//echo $t;
+
+$ret=mysqli_query($con,$t);
+if(mysqli_num_rows($ret)>0)
+{
+	$i=1;
+	echo '<tr>';
+while ($x=mysqli_fetch_assoc($ret))
+ 	{
+	$a=$x['Did'];
+	$e=$x['Cid'];
+	$b=$x['Pid'];
+	$g=$x['Price'];
+	$c=$x['Quantity'];
+	$d=$x['Amt'];
+	$f=$x['img'];
+	
+//echo "<tr> <td>$a</td><td>$e</td>  <td>$b</td> <td>$e</td>  <td>$c</td> <td>$d</td></tr> ";
+	echo "
+	<tr><td><img src='Images/$f' style='height:200px;width:200px'width='300'></td>
+	<td><h3>SHOPKEEPER ID:</h3> $a</td>
+	<td><h3>CUSTOMER ID:</h3> $e</td> 
+	<td><h3>PRODUCT ID:</h3> $b</td>
+	<td><h3>PRICE:</h3> $g</td>
+	<td><h3>QUANTITY:</h3> $c</td> 
+	<td><h3>TOTAL AMOUNT:</h3> $d</td>
+	<td><h3>DELIVER ORDER:</h3><a href='updatestatus.php?data=$b'&& ><p>DELIVER ORDER</p></a></td>";
+	if($i++%5==0)
+		echo '</tr><tr>';	
+
+	}
+}
+else{
+	
+	echo "<script>";
+	echo "alert('order not found');";
+	echo "</script>";
+}
+?>
+<tr>
+</tr>
+</table>
+</body>
+</html>
